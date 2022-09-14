@@ -1,0 +1,43 @@
+name: xvfb-demo
+base: core20
+version: '0.1'
+summary: A simple demo, running Xvfb and x11vnc on UbuntuCore 
+description: |
+  This snap runs Xvfb and x11vnc on an Ubuntu Core device and
+  starts xeyes as demo app. Use it as example in case you need
+  to run hidden GUI apps on an Ubuntu Core device that you
+  want or ned to control via VNC.
+
+grade: stable
+confinement: strict
+
+layout:
+  /usr/share/X11:
+    bind: $SNAP/usr/share/X11
+  /usr/share/fonts:
+    bind: $SNAP/usr/share/fonts
+  /usr/bin/xkbcomp:
+    symlink: $SNAP/usr/bin/xkbcomp
+
+apps:
+  xvfb-demo:
+    command: bin/launch
+    daemon: simple
+    slots:
+      - x11
+    plugs:
+      - log-observe # (connect this for dac_override syscall to quieten log spam)
+      - network
+      - network-bind
+      - opengl
+
+parts:
+  xvfb:
+    plugin: nil
+    stage-packages:
+      - xvfb
+      - x11vnc
+      - x11-apps
+  launcher:
+    plugin: dump
+    source: launcher
