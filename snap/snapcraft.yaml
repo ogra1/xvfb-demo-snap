@@ -35,6 +35,7 @@ parts:
   xvfb:
     plugin: nil
     stage-packages:
+      - coreutils
       - xvfb
       - x11vnc
       - x11-apps

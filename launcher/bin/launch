@@ -4,13 +4,14 @@ set -ex
 
 mkdir -p /tmp/.X11-unix
 chmod 777 /tmp/.X11-unix
-touch /tmp/.X11-unix/X1
 
 export __EGL_VENDOR_LIBRARY_DIRS=$SNAP/etc/glvnd/egl_vendor.d:$SNAP/usr/share/glvnd/egl_vendor.d
 export LIBGL_DRIVERS_PATH=$SNAP/usr/lib/x86_64-linux-gnu/dri
 export LD_LIBRARY_PATH=${SNAP}/usr/lib/x86_64-linux-gnu:${SNAP}/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 
-export DISPLAY=:1
+DPY="$(shuf -i 1-99 -n 1)"
+touch /tmp/.X11-unix/X${DPY}
+export DISPLAY=":${DPY}"
 
 x11vnc -bg -forever -nopw -quiet -display WAIT$DISPLAY &
 Xvfb $DISPLAY -screen 0 1024x768x16 &
